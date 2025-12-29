@@ -5,9 +5,9 @@ import jwt from "jsonwebtoken";
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { email, password, organizationName } = await req.body;
+    const { email, password, organization } = await req.body;
 
-    if (!email || !password || !organizationName) {
+    if (!email || !password || !organization) {
       return res.status(409).json({ error: "not valid  credentials." });
     }
 
@@ -22,9 +22,9 @@ export const register = async (req: Request, res: Response) => {
     const passwordHash = await bcrypt.hash(password, 10);
 
     await prisma.$transaction(async (tx) => {
-      const organization = await tx.organization.create({
+      const org = await tx.organization.create({
         data: {
-          name: organizationName,
+          name: organization,
         },
       });
 
@@ -32,7 +32,7 @@ export const register = async (req: Request, res: Response) => {
         data: {
           email: email,
           passwordHash: passwordHash,
-          organizationId: organization.id,
+          organizationId: org.id,
         },
       });
     });
