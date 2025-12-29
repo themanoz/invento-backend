@@ -31,9 +31,9 @@ export const createProduct = async (req: AuthRequest, res: Response) => {
     const {
       name,
       sku,
-      quantity = 0,
-      cost_price,
-      selling_price,
+      quantityOnHand = 0,
+      costPrice,
+      sellingPrice,
       lowStockThreshold,
     } = req.body || {};
 
@@ -60,9 +60,9 @@ export const createProduct = async (req: AuthRequest, res: Response) => {
       data: {
         name: name,
         sku: sku,
-        quantityOnHand: Number(quantity),
-        costPrice: cost_price ? Number(cost_price) : null,
-        sellingPrice: selling_price ? Number(selling_price) : null,
+        quantityOnHand: Number(quantityOnHand),
+        costPrice: costPrice ? Number(costPrice) : null,
+        sellingPrice: sellingPrice ? Number(sellingPrice) : null,
         lowStockThreshold: lowStockThreshold ? Number(lowStockThreshold) : null,
         organization: {
           connect: {
@@ -97,9 +97,9 @@ export const updateProduct = async (req: AuthRequest, res: Response) => {
       name,
       sku,
       description,
-      quantity,
-      cost_price,
-      selling_price,
+      quantityOnHand,
+      costPrice,
+      sellingPrice,
       lowStockThreshold,
     } = req.body;
 
@@ -133,11 +133,11 @@ export const updateProduct = async (req: AuthRequest, res: Response) => {
     if (name !== undefined) updateData.name = name;
     if (sku !== undefined) updateData.sku = sku;
     if (description !== undefined) updateData.description = description;
-    if (quantity !== undefined) updateData.quantityOnHand = Number(quantity);
-    if (cost_price !== undefined)
-      updateData.costPrice = cost_price ? Number(cost_price) : null;
-    if (selling_price !== undefined)
-      updateData.sellingPrice = selling_price ? Number(selling_price) : null;
+    if (quantityOnHand !== undefined) updateData.quantityOnHand = Number(quantityOnHand);
+    if (costPrice !== undefined)
+      updateData.costPrice = costPrice ? Number(costPrice) : null;
+    if (sellingPrice !== undefined)
+      updateData.sellingPrice = sellingPrice ? Number(sellingPrice) : null;
     if (lowStockThreshold !== undefined)
       updateData.lowStockThreshold = lowStockThreshold
         ? Number(lowStockThreshold)
