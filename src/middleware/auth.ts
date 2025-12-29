@@ -14,11 +14,13 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   try {
-    const authHeader = req.headers.authorization || "";
-    const [scheme, token] = authHeader.split(" ");
+    console.log("Cookies received:", req.cookies);
 
-    if (scheme !== "Bearer" || !token) {
-      return res.status(401).json({ message: "No token provided" });
+    const token = req.cookies.auth_token;
+
+    if (!token) {
+      console.log("No auth_token cookie found");
+      return res.status(401).json({ error: "No token provided" });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {

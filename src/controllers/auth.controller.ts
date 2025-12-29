@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "../lib/prisma.js";
 import { type Request, type Response } from "express";
 import jwt from "jsonwebtoken";
+import type { AuthRequest } from "../middleware/auth.js";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -46,7 +47,7 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = await req.body;
+    const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
@@ -68,30 +69,86 @@ export const login = async (req: Request, res: Response) => {
     const isValidPassword = await bcrypt.compare(password, user.passwordHash);
     if (!isValidPassword) {
       return res.status(401).json({
-        error: "Invalid password",
+        error: "Invalid email or password",
       });
     }
 
     const token = jwt.sign(
-      { userId: user.id, orgId: user.organizationId },
+      { 
+        userId: user.id, 
+        organizationId: user.organizationId
+      },
       process.env.JWT_SECRET!,
       {
         expiresIn: "7d",
       }
     );
 
-    res.cookie("auth_token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
     return res.json({
+      success: true,
       message: "Login successful",
+      data: {
+        token: token,
+        user: {
+          id: user.id,
+          email: user.email,
+          organizationId: user.organizationId,
+          organization: {
+            id: user.organization.id,
+            name: user.organization.name,
+          },
+        },
+      },
     });
   } catch (error) {
     console.error("login error:", error);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+export const getCurrentUser = async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user?.userId) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.user.userId,
+      },
+      select: {
+        id: true,
+        email: true,
+        organizationId: true,
+        createdAt: true,
+        organization: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.json({
+      success: true,
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          organizationId: user.organizationId,
+          organization: user.organization,
+          createdAt: user.createdAt,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("getCurrentUser error:", error);
     return res.status(500).json({ error: "Server error" });
   }
 };

@@ -133,7 +133,7 @@ export const updateProduct = async (req: AuthRequest, res: Response) => {
     if (name !== undefined) updateData.name = name;
     if (sku !== undefined) updateData.sku = sku;
     if (description !== undefined) updateData.description = description;
-    if (quantity !== undefined) updateData.quantity = Number(quantity);
+    if (quantity !== undefined) updateData.quantityOnHand = Number(quantity);
     if (cost_price !== undefined)
       updateData.costPrice = cost_price ? Number(cost_price) : null;
     if (selling_price !== undefined)
