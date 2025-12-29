@@ -16,10 +16,17 @@ export const authMiddleware = (
   try {
     console.log("Cookies received:", req.cookies);
 
-    const token = req.cookies.auth_token;
+    let token = req.cookies.auth_token;
+
+    if (!token && req.headers.authorization) {
+      const parts = req.headers.authorization.split(" ");
+      if (parts.length === 2 && parts[0] === "Bearer") {
+        token = parts[1];
+      }
+    }
 
     if (!token) {
-      console.log("No auth_token cookie found");
+      console.log("No token found in cookies or Authorization header");
       return res.status(401).json({ error: "No token provided" });
     }
 

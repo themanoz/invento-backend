@@ -17,6 +17,13 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
             },
         });
 
+        const organization = await prisma.organization.findUnique({
+            where: { id: orgId },
+            select: { defaultLowStockThreshold: true },
+        });
+
+        const defaultThreshold = organization?.defaultLowStockThreshold ?? 5;
+
         const products = await prisma.product.findMany({
             where: {
                 organizationId: orgId,
@@ -24,7 +31,7 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
         });
 
         const lowStockItems = products.filter((p) => {
-            const threshold = p.lowStockThreshold ?? 5;
+            const threshold = p.lowStockThreshold ?? defaultThreshold;
             return p.quantityOnHand <= threshold;
         });
 

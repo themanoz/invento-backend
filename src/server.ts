@@ -2,6 +2,7 @@ import express from "express";
 import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import settingsRoutes from "./routes/settings.routes.js";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -16,7 +17,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://invento-five.vercel.app",
+    origin: ["https://invento-five.vercel.app", "http://localhost:3000", "http://localhost:3001"],
     credentials: true,
     optionsSuccessStatus: 200,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -27,6 +28,7 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/settings", settingsRoutes);
 
 app.listen(port, () => {
   console.log(`Server up and running on ${port}`);
