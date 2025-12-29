@@ -6,9 +6,6 @@ import jwt from "jsonwebtoken";
 export const register = async (req: Request, res: Response) => {
   try {
     const { email, password, organizationName } = await req.body;
-    console.log(
-      `email: ${email}, pass: ${password} and org: ${organizationName}`
-    );
 
     if (!email || !password || !organizationName) {
       return res.status(409).json({ error: "not valid  credentials." });
