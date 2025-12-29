@@ -14,8 +14,6 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   try {
-    console.log("Cookies received:", req.cookies);
-
     let token = req.cookies.auth_token;
 
     if (!token && req.headers.authorization) {
@@ -26,7 +24,7 @@ export const authMiddleware = (
     }
 
     if (!token) {
-      console.log("No token found in cookies or Authorization header");
+      console.error("No token found in cookies or Authorization header");
       return res.status(401).json({ error: "No token provided" });
     }
 
