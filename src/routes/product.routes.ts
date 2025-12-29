@@ -9,9 +9,12 @@ import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/", authMiddleware, listProducts);
-router.post("/", authMiddleware, createProduct);
-router.put("/:id", authMiddleware, updateProduct);
-router.delete("/:id", authMiddleware, deleteProduct);
+router.route("/")
+  .get(authMiddleware, listProducts)
+  .post(authMiddleware, createProduct);
+
+router.route("/:id")
+  .put(authMiddleware, updateProduct)
+  .delete(authMiddleware, deleteProduct);
 
 export default router;

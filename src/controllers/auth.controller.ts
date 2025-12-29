@@ -6,7 +6,7 @@ import type { AuthRequest } from "../middleware/auth.js";
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { email, password, organization } = await req.body;
+    const { email, password, organization } = req.body;
 
     if (!email || !password || !organization) {
       return res.status(409).json({ error: "not valid  credentials." });
@@ -74,8 +74,8 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const token = jwt.sign(
-      { 
-        userId: user.id, 
+      {
+        userId: user.id,
         organizationId: user.organizationId
       },
       process.env.JWT_SECRET!,

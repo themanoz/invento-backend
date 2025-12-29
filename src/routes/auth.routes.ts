@@ -8,8 +8,8 @@ import { authMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.post("/register", register);
-router.post("/login", login);
-router.get("/me", authMiddleware, getCurrentUser);
+router.route("/register").post(register);
+router.route("/login").post(login);
+router.route("/me").get(authMiddleware, getCurrentUser);
 
 export default router;
