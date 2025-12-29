@@ -20,7 +20,8 @@ model Organization {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user User?
+  user    User?
+  products Product[]
 
   @@map("organizations")
 }
@@ -38,4 +39,25 @@ model User {
 
   @@index([organizationId])
   @@map("users")
+}
+
+model Product {
+  id                String   @id @default(uuid())
+  name              String
+  sku               String
+  description       String?
+  quantity          Int      @default(0)
+  costPrice         Decimal? @db.Decimal(10, 2)
+  sellingPrice      Decimal? @db.Decimal(10, 2)
+  lowStockThreshold Int?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@unique([organizationId, sku])
+  @@index([organizationId])
 }
