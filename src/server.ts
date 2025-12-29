@@ -1,18 +1,16 @@
 import express from "express";
 import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/product.routes.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
-const PORT = 5000;
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 
-app.get("/", (req, res) => {
-  res.json("Hello from server!");
-});
-
-app.listen(PORT, () => {
-  console.log(`Server up and running on ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server up and running on ${process.env.PORT}`);
 });

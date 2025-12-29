@@ -46,7 +46,7 @@ model Product {
   name              String
   sku               String
   description       String?
-  quantity          Int      @default(0)
+  quantityOnHand          Int      @default(0)
   costPrice         Decimal? @db.Decimal(10, 2)
   sellingPrice      Decimal? @db.Decimal(10, 2)
   lowStockThreshold Int?
