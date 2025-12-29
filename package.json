@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon --exec tsx src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "repository": {
     "type": "git",
@@ -13,25 +15,28 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/themanoz/invento-backend/issues"
   },
   "homepage": "https://github.com/themanoz/invento-backend#readme",
   "dependencies": {
-    "@prisma/client": "^7.2.0",
     "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "zod": "^4.2.1"
   },
   "devDependencies": {
+    "@prisma/client": "^6.19.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.0.3",
+    "dotenv": "^17.2.3",
+    "prisma": "^6.19.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
